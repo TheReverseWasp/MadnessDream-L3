@@ -19,8 +19,10 @@ def read_normal_csv(csv):
 def main():
     name_1 = input('ingrese el nombre de ratings: ')
     X = read_normal_csv(name_1)
+    print("go")
     Xt = np.transpose(X)
     Sparsa_ = csr_matrix((Xt[2], (Xt[0].astype(int), Xt[1].astype(int))), dtype=np.int8).toarray()
+    print(len(Xt[1]))
     name_2 = input('ingrese el nombre de movies: ')
     movies = read_normal_csv(name_2)
     answer = []
