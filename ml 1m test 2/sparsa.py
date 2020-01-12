@@ -1,6 +1,7 @@
 import numpy as np
 import json
 import time
+import re
 
 class Sparse_matrix:
     def __init__(self):
@@ -17,7 +18,7 @@ class Sparse_matrix:
             ini, fin = ini - 1, fin - 1
         line = ratings.readline()
         while ini < fin and line:
-            elem = line.split(',')
+            elem = re.findall(r"[\w']+", line)
             self.sparse_dic[int(elem[1])].append([int(elem[0]), float(elem[2])])
             ini += 1
             line = ratings.readline()
@@ -27,10 +28,9 @@ class Sparse_matrix:
 
 def read_movies(movies):
     line = movies.readline()
-    line = movies.readline()
     answer_dic = {}
     while line:
-        list_line = line.split(',')
+        list_line = re.findall(r"[\w']+", line)
         answer_dic[int(list_line[0])] = 'Pelicula: ' + list_line[1] + ', Genero:' + list_line[2]
         line = movies.readline()
     return answer_dic
@@ -49,16 +49,16 @@ def read_json_by_pos(pos, to_search):
 
 def main():
     read_and_generate = input('read and generate? y/n ')
-    movies = open('movies.csv', 'r')
+    movies = open('movies.dat', 'r', encoding='latin-1')
     movie_dic = read_movies(movies)
     pos = 0
     creation_file_t = 0
     read_time_loss = 0
     if read_and_generate == 'y':
         step = int(input('step? '))
-        ini, fin = 1, step
+        ini, fin = 0, step
         #could be improved with line cache ref: https://stackoverflow.com/questions/2444538/go-to-a-specific-line-in-python
-        ratings = open('ratings.csv', 'r')
+        ratings = open('ratings.dat', 'r')
         Sparse_matrix_runner = Sparse_matrix()
         Sparse_matrix_runner.prepare_dic(movie_dic)
         start_read_time_loss = time.time()
@@ -73,7 +73,7 @@ def main():
         ini += step
         fin += step
         while continue_answer == False:
-            ratings = open('ratings.csv', 'r')
+            ratings = open('ratings.dat', 'r')
             Sparse_matrix_runner = Sparse_matrix()
             Sparse_matrix_runner.prepare_dic(movie_dic)
             start_read_time_loss = time.time()

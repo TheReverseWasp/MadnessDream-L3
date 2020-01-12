@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from scipy.sparse import csr_matrix
+import time
 
 def read_csv(csv):
     x = pd.read_csv(csv, sep = ',', encoding = 'utf-8')
@@ -18,7 +19,10 @@ def read_normal_csv(csv):
 
 def main():
     name_1 = input('ingrese el nombre de ratings: ')
+    temp = time.time()
     X = read_normal_csv(name_1)
+    read_time = time.time() - temp
+    print('Tiempo de lectura: ', read_time)
     Xt = np.transpose(X)
     Sparsa_ = csr_matrix((Xt[2], (Xt[0].astype(int), Xt[1].astype(int))), dtype=np.int8).toarray()
     name_2 = input('ingrese el nombre de movies: ')
